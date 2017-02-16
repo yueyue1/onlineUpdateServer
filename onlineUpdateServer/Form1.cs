@@ -15,15 +15,11 @@ namespace onlineUpdateServer
 {
     public partial class Form1 : Form
     {
-        public class user
-        {
-            public Socket workSocket;
-            public static int bufferSize = 1024;
-            public byte[] buffer = new byte[bufferSize];
-        }
+        //服务器套接字
         Socket serverSocket;
         //客户端
         List<user> clientSockets = new List<user>();
+
         public Form1()
         {
             InitializeComponent();
@@ -44,7 +40,14 @@ namespace onlineUpdateServer
         {
             EndPoint localEP = new IPEndPoint(IPAddress.Any, 5555);
             serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            serverSocket.Bind(localEP);
+            try
+            {
+                serverSocket.Bind(localEP);
+            }
+            catch
+            {
+                Console.WriteLine("绑定出现异常");
+            }
             serverSocket.Listen(100);
 
             serverSocket.BeginAccept(new AsyncCallback(AcceptCallback), serverSocket);
@@ -80,7 +83,7 @@ namespace onlineUpdateServer
             }
             catch
             {
-                MessageBox.Show("客户端已关闭");
+                //MessageBox.Show("客户端已关闭");
             }
         }
         private void Send(user client)
@@ -88,12 +91,17 @@ namespace onlineUpdateServer
             byte[] buffer = Encoding.Default.GetBytes("successful");
             client.workSocket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(SendCallback),
                      client);
-            MessageBox.Show("服务器发送1111成功");
+            //MessageBox.Show("服务器发送1111成功");
         }
         private void SendCallback(IAsyncResult ar)
         {
             user SocketEnd = (user)ar.AsyncState;
-            int endlength = SocketEnd.workSocket.EndSend(ar);
+            try
+            {
+                int endlength = SocketEnd.workSocket.EndSend(ar);
+            }
+            catch
+            { }
         }
     }
 }
