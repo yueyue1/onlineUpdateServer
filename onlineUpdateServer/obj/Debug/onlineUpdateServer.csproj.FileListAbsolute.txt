@@ -1,9 +1,9 @@
 F:\Book6\chapter6\onlineUpdateServer\onlineUpdateServer\bin\Debug\onlineUpdateServer.exe.config
+F:\Book6\chapter6\onlineUpdateServer\onlineUpdateServer\obj\Debug\onlineUpdateServer.exe
+F:\Book6\chapter6\onlineUpdateServer\onlineUpdateServer\obj\Debug\onlineUpdateServer.pdb
 F:\Book6\chapter6\onlineUpdateServer\onlineUpdateServer\bin\Debug\onlineUpdateServer.exe
 F:\Book6\chapter6\onlineUpdateServer\onlineUpdateServer\bin\Debug\onlineUpdateServer.pdb
 F:\Book6\chapter6\onlineUpdateServer\onlineUpdateServer\obj\Debug\onlineUpdateServer.csprojResolveAssemblyReference.cache
 F:\Book6\chapter6\onlineUpdateServer\onlineUpdateServer\obj\Debug\onlineUpdateServer.Form1.resources
 F:\Book6\chapter6\onlineUpdateServer\onlineUpdateServer\obj\Debug\onlineUpdateServer.Properties.Resources.resources
 F:\Book6\chapter6\onlineUpdateServer\onlineUpdateServer\obj\Debug\onlineUpdateServer.csproj.GenerateResource.Cache
-F:\Book6\chapter6\onlineUpdateServer\onlineUpdateServer\obj\Debug\onlineUpdateServer.exe
-F:\Book6\chapter6\onlineUpdateServer\onlineUpdateServer\obj\Debug\onlineUpdateServer.pdb

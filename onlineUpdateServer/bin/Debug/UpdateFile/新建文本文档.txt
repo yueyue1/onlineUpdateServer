@@ -1,0 +1,5 @@
+X264_DECODER_H sdk_ffmpeg_decode::X264Decoder_Init()
+
+struct AVFrame * sdk_ffmpeg_decode::X264Decoder_Decode()
+
+void sdk_ffmpeg_decode::X264Decoder_UnInit(X264_DECODER_H dwHandle)
