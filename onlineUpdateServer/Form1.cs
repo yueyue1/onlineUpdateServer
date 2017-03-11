@@ -24,8 +24,8 @@ namespace onlineUpdateServer
         string fileName = "";
         class FileInformation
         {
-            public byte[] fileName { get; set; }
-            public byte[] fileData { get; set; }
+            public string fileName { get; set; }
+            public string fileData { get; set; }
         }
 
         public Form1()
@@ -48,7 +48,6 @@ namespace onlineUpdateServer
                 this.listBox1.Items.Add(nextfile);
             }
         }
-
         private void Form1_Load(object sender, EventArgs e)
         {
             EndPoint localEP = new IPEndPoint(IPAddress.Any, 5555);
@@ -65,6 +64,7 @@ namespace onlineUpdateServer
             serverSocket.Listen(1000);
             serverSocket.BeginAccept(new AsyncCallback(AcceptCallback), serverSocket);
         }
+
         /*接收到客户端连接*/
         private void AcceptCallback(IAsyncResult ar)
         {
@@ -81,6 +81,7 @@ namespace onlineUpdateServer
                 new AsyncCallback(ReceiveCallback),client);
             serverSocket.BeginAccept(new AsyncCallback(AcceptCallback), serverSocket);
         }
+
         /*接收消息回调函数*/
         private void ReceiveCallback(IAsyncResult ar)
         {
@@ -102,6 +103,7 @@ namespace onlineUpdateServer
                 //MessageBox.Show("客户端已关闭");
             }
         }
+
         /*向指定的客户端发送心跳包回应*/
         private void Send(user client)
         {
@@ -140,13 +142,12 @@ namespace onlineUpdateServer
             FileStream fileStream = fileInfo.OpenRead();
 
             //得到文件名
-            byte[] filename = Encoding.Default.GetBytes(fileInfo.Name);
-            fileSend.fileName = Encoding.Default.GetBytes(fileInfo.Name);
+            fileSend.fileName = fileInfo.Name;
 
             //得到文件数据
             byte[] data = new byte[fileInfo.Length];
             fileStream.Read(data, 0, data.Length);
-            fileSend.fileData = data;
+            fileSend.fileData = Convert.ToBase64String(data);
 
             //序列化数据
             JavaScriptSerializer jsser = new JavaScriptSerializer();
@@ -159,7 +160,6 @@ namespace onlineUpdateServer
             try
             {
                 FileInformation file = jsser.Deserialize<FileInformation>(json);
-                MessageBox.Show(Encoding.Default.GetString(file.fileName));
             }
             catch(Exception e)
             {
