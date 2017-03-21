@@ -33,7 +33,6 @@ namespace onlineUpdateServer
             InitializeComponent();
             Control.CheckForIllegalCrossThreadCalls = false;
         }
-
         private void button1_Click(object sender, EventArgs e)
         {
             this.listBox1.Items.Clear();
@@ -100,7 +99,6 @@ namespace onlineUpdateServer
             }
             catch
             {
-                //MessageBox.Show("客户端已关闭");
             }
         }
 
@@ -111,6 +109,8 @@ namespace onlineUpdateServer
             client.workSocket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(SendCallback),
                      client);
         }
+
+        /*回调函数*/
         private void SendCallback(IAsyncResult ar)
         {
             user SocketEnd = (user)ar.AsyncState;
@@ -137,53 +137,49 @@ namespace onlineUpdateServer
             //找到指定文件夹下面的第一个文件，为他创建流
             fileName =Application.ExecutablePath+@"\..\";
             //FileInfo fileInfo = new FileInfo(fileName + "UpdateFile\\"+this.listBox1.Items[0].ToString());
-
-            FileInfo fileInfo = new FileInfo(this.textBox1.Text);
-            FileStream fileStream = fileInfo.OpenRead();
-
-            //得到文件名
-            fileSend.fileName = fileInfo.Name;
-
-            //得到文件数据
-            byte[] data = new byte[fileInfo.Length];
-            fileStream.Read(data, 0, data.Length);
-            fileSend.fileData = Convert.ToBase64String(data);
-
-            //序列化数据
-            JavaScriptSerializer jsser = new JavaScriptSerializer();
-            jsser.MaxJsonLength = Int32.MaxValue;
-            string json = jsser.Serialize(fileSend);
-
-            byte[] SendData = Encoding.Default.GetBytes(json);
-            byte[] SendDataFirst = Encoding.Default.GetBytes("1234567");
-            byte[] SendDataEnd = Encoding.Default.GetBytes("7654321");
-            try
+            if (textBox1.Text != "")
             {
-                FileInformation file = jsser.Deserialize<FileInformation>(json);
-            }
-            catch(Exception e)
-            {
-                MessageBox.Show(e.ToString());
-            }
-            try
-            {       
-                for (int j = 0; j < clientSockets.Count; j++)
+                FileInfo fileInfo = new FileInfo(this.textBox1.Text);
+                FileStream fileStream = fileInfo.OpenRead();
+
+                //得到文件名
+                fileSend.fileName = fileInfo.Name;
+
+                //得到文件数据
+                byte[] data = new byte[fileInfo.Length];
+                fileStream.Read(data, 0, data.Length);
+                fileSend.fileData = Convert.ToBase64String(data);
+
+                //序列化数据
+                JavaScriptSerializer jsser = new JavaScriptSerializer();
+                jsser.MaxJsonLength = Int32.MaxValue;
+                string json = jsser.Serialize(fileSend);
+
+                byte[] SendData = Encoding.Default.GetBytes(json);
+                byte[] SendDataFirst = Encoding.Default.GetBytes("1234567");
+                byte[] SendDataEnd = Encoding.Default.GetBytes("7654321");
+
+                try
                 {
-                    clientSockets[j].workSocket.BeginSend(SendDataFirst, 0, SendDataFirst.Length, SocketFlags.None,
-                        new AsyncCallback(SendCallback), clientSockets[j]);
-                    clientSockets[j].workSocket.BeginSend(SendData, 0, SendData.Length, SocketFlags.None,
-                        new AsyncCallback(SendCallback), clientSockets[j]);
-                    clientSockets[j].workSocket.BeginSend(SendDataEnd, 0, SendDataEnd.Length, SocketFlags.None,
-                        new AsyncCallback(SendCallback), clientSockets[j]);
+                    for (int j = 0; j < clientSockets.Count; j++)
+                    {
+                        clientSockets[j].workSocket.BeginSend(SendDataFirst, 0, SendDataFirst.Length, SocketFlags.None,
+                            new AsyncCallback(SendCallback), clientSockets[j]);
+                        clientSockets[j].workSocket.BeginSend(SendData, 0, SendData.Length, SocketFlags.None,
+                            new AsyncCallback(SendCallback), clientSockets[j]);
+                        clientSockets[j].workSocket.BeginSend(SendDataEnd, 0, SendDataEnd.Length, SocketFlags.None,
+                            new AsyncCallback(SendCallback), clientSockets[j]);
+                    }
+                    MessageBox.Show("上传成功!");
                 }
-                MessageBox.Show("上传成功!");
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.ToString());
-            }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.ToString());
+                }
+            }          
         }
 
+        /*选择文件*/
         private void button3_Click(object sender, EventArgs e)
         {
             if(this.openFileDialog1.FileName != "")
